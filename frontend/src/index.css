@@ -1,0 +1,118 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background-color: #faf8ff;
+}
+
+.glass-level-2 {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(24px);
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  box-shadow: 0 40px 60px -15px rgba(0, 0, 0, 0.08);
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.04);
+}
+
+.kanban-column {
+  min-height: calc(100vh - 220px);
+}
+
+.tech-bg-pattern {
+  background-color: #faf8ff;
+  background-image:
+    radial-gradient(at 0% 0%, #eaedff 0, transparent 50%),
+    radial-gradient(at 100% 100%, #ffdad6 0, transparent 50%);
+}
+
+.bg-mesh {
+  background-color: #faf8ff;
+  background-image:
+    radial-gradient(at 0% 0%, rgba(222, 46, 42, 0.05) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(33, 112, 228, 0.05) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(222, 46, 42, 0.05) 0px, transparent 50%),
+    radial-gradient(at 0% 100%, rgba(33, 112, 228, 0.05) 0px, transparent 50%);
+}
+
+.surgical-accent {
+  position: relative;
+}
+
+.surgical-accent::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 15%;
+  height: 70%;
+  width: 4px;
+  background-color: #b90b14;
+  border-radius: 0 4px 4px 0;
+}
+
+.glass-row {
+  background: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.glass-row:hover {
+  background: rgba(255, 255, 255, 0.6);
+  transform: translateY(-2px);
+  box-shadow: 0 20px 40px rgba(15, 23, 42, 0.04);
+  border-color: rgba(185, 11, 20, 0.2);
+}
+.tech-bg {
+  background-color: #f8fafc;
+  background-image: radial-gradient(circle at 2px 2px, rgba(15, 23, 42, 0.02) 1px, transparent 0);
+  background-size: 32px 32px;
+}
+
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  user-select: none;
+}
+
+/* Prevent iOS auto-zoom on input focus (inputs < 16px trigger zoom) */
+input, textarea, select {
+  font-size: max(16px, 1em);
+}
+
+/* Smooth touch scrolling */
+.overflow-x-auto, .overflow-y-auto {
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Safe area padding for notched phones */
+.safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
