@@ -3,6 +3,8 @@ import { api } from "../api/client";
 import { useNavigate } from "react-router-dom";
 import kocLogo from "../assets/koc-logo.png";
 
+const GITHUB_REPO_URL = "https://github.com/walterbishop67/test-koc-sistem.git";
+
 const SSO_PROVIDERS = [
   {
     id: "azure",
@@ -136,13 +138,26 @@ export default function AuthPage() {
             <span className="material-symbols-outlined mb-4 block text-5xl text-secondary">mark_email_read</span>
             <h2 className="mb-2 font-headline-md text-headline-md text-on-surface">Check your email</h2>
             <p className="mt-2 text-[13px] sm:text-sm text-on-surface-variant">
-              We sent a verification link to your email.
+              We sent a verification link to your email address. Please confirm your account to continue.
             </p>
             <div className="mt-4 flex items-start gap-2.5 rounded-xl bg-amber-50 border border-amber-200 px-4 py-3 text-left">
               <span className="material-symbols-outlined mt-0.5 text-[18px] text-amber-500 flex-shrink-0">warning</span>
               <p className="text-[12px] sm:text-[13px] text-amber-800">
-                If you do not see it, check your <span className="font-semibold">spam / junk</span> folder.
+                The email may have landed in your <span className="font-semibold">spam / junk</span> folder. If you do not see it there and want to continue testing right away, you can sign in with the shared test account below.
               </p>
+            </div>
+            <div className="mt-4 rounded-xl border border-slate-200 bg-slate-50/80 px-4 py-4 text-left">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-500">
+                Shared Test Account
+              </p>
+              <div className="mt-3 space-y-2 text-[13px] sm:text-sm text-slate-700">
+                <p>
+                  <span className="font-semibold text-slate-900">Email:</span> tester@taskflow.dev
+                </p>
+                <p>
+                  <span className="font-semibold text-slate-900">Password:</span> TaskFlowTest123!
+                </p>
+              </div>
             </div>
             <button
               onClick={() => {
@@ -282,6 +297,15 @@ export default function AuthPage() {
                   Designed & developed by{" "}
                   <span className="font-semibold text-slate-600">Umut Altun</span>
                 </p>
+                <a
+                  href={GITHUB_REPO_URL}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="mt-3 inline-flex items-center justify-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-[11px] font-semibold text-slate-600 transition-all hover:border-slate-300 hover:text-red-600 hover:shadow-sm"
+                >
+                  <span className="material-symbols-outlined text-[15px]">code</span>
+                  View source on GitHub
+                </a>
               </div>
             </div>
           </div>
@@ -590,6 +614,15 @@ export default function AuthPage() {
                         {isLogin ? "Create an account" : "Sign In"}
                       </button>
                     </p>
+                    <a
+                      href={GITHUB_REPO_URL}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="flex w-full items-center justify-center gap-2 rounded-xl border border-slate-200 bg-slate-50/70 py-2.5 text-[13px] font-semibold text-slate-600 transition-all duration-300 hover:border-slate-300 hover:bg-white hover:text-red-600"
+                    >
+                      <span className="material-symbols-outlined text-[18px]">code</span>
+                      View source on GitHub
+                    </a>
                   </div>
                 </>
               )}
