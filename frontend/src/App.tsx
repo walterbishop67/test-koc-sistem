@@ -3,6 +3,7 @@ import { Routes, Route, Navigate, useNavigate, useParams } from "react-router-do
 import AuthPage from "./components/AuthPage";
 import BoardList from "./components/BoardList";
 import ProjectsOverview from "./components/ProjectsOverview";
+import ProjectDetail from "./components/ProjectDetail";
 import BoardView from "./components/BoardView";
 import BoardSettings from "./components/BoardSettings";
 import TeamPage from "./components/TeamPage";
@@ -87,8 +88,9 @@ export default function App() {
       >
         <Route path="/" element={<DashboardRedirect />} />
         <Route path="/projects" element={<ProjectsOverview />} />
-        <Route path="/projects/:boardId" element={<BoardList />} />
+        <Route path="/projects/:projectId" element={<ProjectDetail />} />
         <Route path="/board/:boardId" element={<BoardViewKeyed />} />
+        <Route path="/board/:boardId/list" element={<BoardList />} />
         <Route path="/board/:boardId/settings" element={<BoardSettings />} />
         <Route path="/team" element={<TeamPage />} />
         <Route path="/analytics" element={<AnalyticsPage />} />

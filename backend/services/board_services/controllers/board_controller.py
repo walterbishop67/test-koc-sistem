@@ -22,8 +22,9 @@ class BoardController:
         initial_sprint: Any | None = None,
         team_id: str | None = None,
         ai_columns: list[dict[str, Any]] | None = None,
+        project_id: str | None = None,
     ) -> dict[str, Any]:
-        return await self._svc.create_board(title, user_id, initial_sprint, team_id, ai_columns)
+        return await self._svc.create_board(title, user_id, initial_sprint, team_id, ai_columns, project_id)
 
     async def update_board(self, board_id: str, title: str, user_id: str) -> dict[str, Any]:
         try:

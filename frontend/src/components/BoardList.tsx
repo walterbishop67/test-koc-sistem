@@ -46,7 +46,7 @@ function SprintBadge({ card, sprints, onAssign }: {
         }`}
       >
         <span className="material-symbols-outlined text-[13px]">sprint</span>
-        <span className="hidden sm:inline">{assigned ? assigned.name : "Sprint'e Ekle"}</span>
+        <span className="hidden sm:inline">{assigned ? assigned.name : "Add to Sprint"}</span>
       </button>
 
       {open && (
@@ -194,7 +194,7 @@ export default function BoardList() {
       setSprintStart("");
       setSprintEnd("");
       setSprintGoal("");
-      navigate(`/projects/${board.id}`);
+      navigate(`/board/${board.id}/list`);
     } finally {
       setCreatingBoard(false);
     }
@@ -249,7 +249,7 @@ export default function BoardList() {
             >
               <span className="material-symbols-outlined text-sm">add_circle</span>
               <span className="hidden sm:inline">{activeBoard ? "Issue Create" : "Board Create"}</span>
-              <span className="sm:hidden">Yeni</span>
+              <span className="sm:hidden">New</span>
             </button>
           </div>
         </header>
@@ -291,11 +291,11 @@ export default function BoardList() {
                 <div className="flex items-center justify-between mb-3 md:mb-4">
                   <span className="material-symbols-outlined text-primary">sprint</span>
                 </div>
-                <div className="text-slate-400 font-headline-md text-[10px] md:text-xs uppercase tracking-wider mb-1">Sprint Durumu</div>
+                <div className="text-slate-400 font-headline-md text-[10px] md:text-xs uppercase tracking-wider mb-1">Sprint Status</div>
                 <div className="font-body-md text-sm leading-relaxed text-white">
                   {activeSprint
-                    ? `${activeSprint.name} aktif — ${sprintCards.length}tasks`
-                    : "Active sprint yok"}
+                    ? `${activeSprint.name} active — ${sprintCards.length} tasks`
+                    : "No active sprint"}
                 </div>
               </div>
             </section>
@@ -394,7 +394,7 @@ export default function BoardList() {
                           </span>
                           {dueDate && (
                             <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${isOverdue ? "bg-red-50 text-red-600" : "bg-slate-50 text-slate-500"}`}>
-                              {dueDate.toLocaleDateString("tr-TR", { day: "numeric", month: "short" })}
+                              {dueDate.toLocaleDateString("en-US", { day: "numeric", month: "short" })}
                             </span>
                           )}
                         </div>
@@ -488,7 +488,7 @@ export default function BoardList() {
         <div className="fixed inset-0 bg-black/30 backdrop-blur-sm z-[60] flex items-end sm:items-center justify-center" onClick={() => setShowNewTask(false)}>
           <div className="glass-card rounded-t-[24px] sm:rounded-[24px] p-6 sm:p-8 w-full sm:max-w-md" style={{ paddingBottom: "max(1.5rem, env(safe-area-inset-bottom))" }} onClick={(e) => e.stopPropagation()}>
             <div className="w-10 h-1 bg-slate-200 rounded-full mx-auto mb-5 sm:hidden" />
-            <h2 className="font-headline-md text-headline-md text-on-surface mb-6">Yeni Issue Create</h2>
+            <h2 className="font-headline-md text-headline-md text-on-surface mb-6">Create New Issue</h2>
             <form onSubmit={handleCreateTask} className="space-y-4">
               <div>
                 <label className="block font-label-caps text-label-caps text-slate-500 mb-2">Task Title</label>
@@ -554,14 +554,14 @@ export default function BoardList() {
                     }}
                     className="px-4 py-2 bg-primary text-white rounded-xl text-sm font-bold disabled:opacity-50 transition-all hover:brightness-110 flex items-center gap-1.5">
                     <span className="material-symbols-outlined text-[16px]">group_add</span>
-                    {addingTeam ? "..." : "Hepsini Ekle"}
+                    {addingTeam ? "..." : "Add All"}
                   </button>
                 </div>
               </div>
             )}
 
             <div className="px-6 py-4 border-b border-slate-100 bg-slate-50/60">
-              <p className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-3">Email ile davet et</p>
+              <p className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-3">Invite by email</p>
               <div className="flex gap-2">
                 <EmailAutocomplete value={inviteEmail} onChange={setInviteEmail} placeholder="kullanici@ornek.com"
                   inputClassName="w-full bg-white border border-slate-200 rounded-xl py-2 px-3 text-sm outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all" />
@@ -664,7 +664,7 @@ export default function BoardList() {
                       className="w-full bg-white border border-slate-200 rounded-xl py-2.5 px-3 outline-none focus:ring-2 focus:ring-primary/20 transition-all text-sm" />
                   </div>
                   <input type="text" value={sprintGoal} onChange={(e) => setSprintGoal(e.target.value)}
-                    placeholder="Sprint hedefi (opsiyonel)"
+                    placeholder="Sprint goal (optional)"
                     className="w-full bg-white border border-slate-200 rounded-xl py-2.5 px-3 outline-none focus:ring-2 focus:ring-primary/20 transition-all text-sm" />
                 </div>
               )}

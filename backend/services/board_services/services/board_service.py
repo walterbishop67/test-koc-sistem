@@ -54,8 +54,9 @@ class BoardService:
         initial_sprint: Any | None = None,
         team_id: str | None = None,
         ai_columns: list[dict[str, Any]] | None = None,
+        project_id: str | None = None,
     ) -> dict[str, Any]:
-        board = await self._repo.create(title, user_id, team_id)
+        board = await self._repo.create(title, user_id, team_id, project_id)
         board_id = board["id"]
         # BASE-62 digits matching the fractional-indexing library on the frontend.
         # Valid single-digit keys: 'a' + BASE_62[i] → 'a0', 'a1', ..., 'az'

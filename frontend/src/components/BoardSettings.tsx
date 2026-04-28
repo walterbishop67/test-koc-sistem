@@ -226,7 +226,7 @@ export default function BoardSettings() {
                         disabled={!newColTitle.trim()}
                         className="px-6 py-3 bg-secondary text-white rounded-xl font-bold text-sm hover:brightness-110 transition-all disabled:opacity-50"
                       >
-                        Ekle
+                        Add
                       </button>
                     </form>
                   )}
@@ -252,14 +252,14 @@ export default function BoardSettings() {
                     disabled={archiving}
                     className="w-full py-4 px-4 bg-white border border-amber-100 rounded-xl text-amber-600 font-bold text-sm hover:bg-amber-500 hover:text-white transition-all flex items-center justify-between group disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    <span>{archiving ? "Archiveleniyor..." : "Projeyi Archivele"}</span>
+                    <span>{archiving ? "Archiving..." : "Archive Board"}</span>
                     <span className="material-symbols-outlined opacity-50 group-hover:opacity-100">inventory_2</span>
                   </button>
                   <button
                     onClick={() => setShowDeleteConfirm(true)}
                     className="w-full py-4 px-4 bg-white border border-red-100 rounded-xl text-red-600 font-bold text-sm hover:bg-red-600 hover:text-white transition-all flex items-center justify-between group"
                   >
-                    <span>Projeyi Sil</span>
+                    <span>Delete Board</span>
                     <span className="material-symbols-outlined opacity-50 group-hover:opacity-100">delete_forever</span>
                   </button>
                 </div>
@@ -291,7 +291,7 @@ export default function BoardSettings() {
               disabled={!isDirty || saving}
               className="px-10 py-3 rounded-xl bg-primary text-white font-bold shadow-lg shadow-primary/30 hover:scale-105 transition-all active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:scale-100"
             >
-              {saving ? "Kaydediliyor..." : "Kaydet"}
+              {saving ? "Saving..." : "Save"}
             </button>
           </div>
         </div>

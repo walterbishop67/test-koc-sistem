@@ -92,7 +92,7 @@ function ColumnHeader({ column }: { column: Column }) {
               className="w-full flex items-center gap-2.5 px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition-colors"
             >
               <span className="material-symbols-outlined text-[16px]">delete</span>
-              Sil
+              Delete
             </button>
           </div>
         )}

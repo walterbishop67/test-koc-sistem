@@ -55,7 +55,7 @@ function ActivityTimeline({
   };
 
   const PriorityChip = ({ value }: { value: string | null }) => {
-    if (!value) return <span className="text-slate-400 italic">yok</span>;
+    if (!value) return <span className="text-slate-400 italic">none</span>;
     const p = PRIORITY_LABELS[value];
     return p
       ? <span className={`inline-block px-1.5 py-0.5 rounded text-[11px] font-semibold ${p.cls}`}>{p.label}</span>
@@ -71,7 +71,7 @@ function ActivityTimeline({
   return (
     <div>
       <label className="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-3">
-        Aktivite <span className="text-slate-300">({activities.length})</span>
+        Activity <span className="text-slate-300">({activities.length})</span>
       </label>
       <div className="space-y-2">
         {activities.map((a) => (
@@ -216,7 +216,7 @@ export default function CardModal({ card, boardId, onClose }: Props) {
       updateCardLabels(card.id, nextBoardLabels.filter((l) => next.has(l.id)));
       setNewLabelName("");
     } catch {
-      setLabelError("Bu adda bir etiket zaten mevcut.");
+      setLabelError("A label with this name already exists.");
     } finally {
       setLabelSaving(false);
     }
@@ -324,7 +324,7 @@ export default function CardModal({ card, boardId, onClose }: Props) {
 
   const formatDate = (iso: string) => {
     const d = new Date(iso);
-    return d.toLocaleDateString("tr-TR", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
+    return d.toLocaleDateString("en-US", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
   };
 
   const avatarLabel = (comment: { users: { full_name: string | null; email: string } }) =>
@@ -448,7 +448,7 @@ export default function CardModal({ card, boardId, onClose }: Props) {
             {/* Due Date */}
             <div>
               <label className="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-2">
-                End date Tarihi
+                Due Date
               </label>
               <div className="relative">
                 <input
@@ -495,7 +495,7 @@ export default function CardModal({ card, boardId, onClose }: Props) {
           {/* Labels */}
           <div>
             <label className="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-2">
-              Etiketler
+              Labels
             </label>
 
             {/* Existing board labels */}
@@ -531,7 +531,7 @@ export default function CardModal({ card, boardId, onClose }: Props) {
                             disabled={!editName.trim()}
                             className="flex-shrink-0 bg-[#F9423A] text-white px-2 py-1 rounded text-[11px] font-bold disabled:opacity-50"
                           >
-                            Kaydet
+                            Save
                           </button>
                           <button
                             onClick={() => setEditingLabelId(null)}
@@ -561,14 +561,14 @@ export default function CardModal({ card, boardId, onClose }: Props) {
                           <button
                             onClick={() => startEditLabel(label)}
                             className="opacity-0 group-hover:opacity-100 transition-opacity text-slate-300 hover:text-slate-500 ml-0.5 p-1"
-                            title="Düzenle"
+                            title="Edit"
                           >
                             <span className="material-symbols-outlined text-[13px]">edit</span>
                           </button>
                           <button
                             onClick={() => handleDeleteLabel(label.id)}
                             className="opacity-0 group-hover:opacity-100 transition-opacity text-slate-300 hover:text-red-400 p-1"
-                            title="Etiketi sil"
+                            title="Delete label"
                           >
                             <span className="material-symbols-outlined text-[13px]">delete</span>
                           </button>
@@ -587,7 +587,7 @@ export default function CardModal({ card, boardId, onClose }: Props) {
                 value={newLabelName}
                 onChange={(e) => { setNewLabelName(e.target.value); setLabelError(null); }}
                 onKeyDown={(e) => e.key === "Enter" && handleCreateLabel()}
-                placeholder="Yeni etiket adı..."
+                placeholder="New label name..."
                 className="flex-1 border border-slate-200 rounded-lg px-3 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-[#F9423A]/20 focus:border-[#F9423A]/50 transition-all"
               />
               <div className="flex gap-1">
@@ -605,7 +605,7 @@ export default function CardModal({ card, boardId, onClose }: Props) {
                 disabled={labelSaving || !newLabelName.trim()}
                 className="flex-shrink-0 bg-slate-100 hover:bg-slate-200 text-slate-600 px-3 py-1.5 rounded-lg text-xs font-bold disabled:opacity-50 transition-all"
               >
-                {labelSaving ? <span className="animate-spin material-symbols-outlined text-[12px]">progress_activity</span> : "Ekle"}
+                {labelSaving ? <span className="animate-spin material-symbols-outlined text-[12px]">progress_activity</span> : "Add"}
               </button>
             </div>
             {labelError && (
@@ -627,7 +627,7 @@ export default function CardModal({ card, boardId, onClose }: Props) {
               >
                 {generatingDesc
                   ? <><span className="animate-spin material-symbols-outlined text-[12px]">progress_activity</span>Creating...</>
-                  : <><span className="material-symbols-outlined text-[12px]">auto_awesome</span>AI ile Create</>
+                  : <><span className="material-symbols-outlined text-[12px]">auto_awesome</span>Create with AI</>
                 }
               </button>
             </div>
@@ -635,7 +635,7 @@ export default function CardModal({ card, boardId, onClose }: Props) {
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               rows={4}
-              placeholder="Description ekle..."
+              placeholder="Add a description..."
               className="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#F9423A]/20 focus:border-[#F9423A]/50 resize-none transition-all"
             />
           </div>
@@ -643,7 +643,7 @@ export default function CardModal({ card, boardId, onClose }: Props) {
           {/* Comments */}
           <div>
             <label className="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-3">
-              Yorumlar {comments.length > 0 && <span className="text-slate-300">({comments.length})</span>}
+              Comments {comments.length > 0 && <span className="text-slate-300">({comments.length})</span>}
             </label>
 
             {/* Comment list */}
@@ -667,7 +667,7 @@ export default function CardModal({ card, boardId, onClose }: Props) {
                             <button
                               onClick={() => deleteComment(c.id, card.id)}
                               className="ml-auto text-slate-300 hover:text-red-400 transition-colors flex-shrink-0"
-                              title="Yorumu sil"
+                              title="Delete comment"
                             >
                               <span className="material-symbols-outlined text-[15px]">delete</span>
                             </button>
@@ -706,7 +706,7 @@ export default function CardModal({ card, boardId, onClose }: Props) {
                     className="bg-[#F9423A] hover:brightness-110 text-white px-4 py-1.5 rounded-lg text-xs font-bold disabled:opacity-50 transition-all flex items-center gap-1"
                   >
                     {commentSaving
-                      ? <><span className="animate-spin material-symbols-outlined text-[13px]">progress_activity</span>Sendiliyor</>
+                      ? <><span className="animate-spin material-symbols-outlined text-[13px]">progress_activity</span>Sending...</>
                       : <><span className="material-symbols-outlined text-[13px]">send</span>Send</>
                     }
                   </button>
@@ -745,8 +745,8 @@ export default function CardModal({ card, boardId, onClose }: Props) {
                 className="bg-[#F9423A] hover:brightness-110 text-white px-5 py-2 rounded-xl text-sm font-bold disabled:opacity-50 transition-all flex items-center gap-1.5"
               >
                 {saving
-                  ? <><span className="animate-spin material-symbols-outlined text-[16px]">progress_activity</span>Kaydediliyor</>
-                  : <><span className="material-symbols-outlined text-[16px]">save</span>Kaydet</>
+                  ? <><span className="animate-spin material-symbols-outlined text-[16px]">progress_activity</span>Saving...</>
+                  : <><span className="material-symbols-outlined text-[16px]">save</span>Save</>
                 }
               </button>
             </div>

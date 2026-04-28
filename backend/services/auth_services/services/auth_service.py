@@ -17,9 +17,9 @@ class AuthService:
             res = await self._sb.auth.sign_in_with_password({"email": email, "password": password})
         except Exception as exc:
             log.warning("Login başarısız: %s", exc)
-            raise HTTPException(status.HTTP_401_UNAUTHORIZED, detail=str(exc))
+            raise HTTPException(status.HTTP_401_UNAUTHORIZED, detail="Hatalı e-posta veya şifre.")
         if not res.session:
-            raise HTTPException(status.HTTP_401_UNAUTHORIZED, detail="Geçersiz e-posta veya şifre")
+            raise HTTPException(status.HTTP_401_UNAUTHORIZED, detail="Hatalı e-posta veya şifre.")
         return res.session.access_token
 
     async def signup(self, email: str, password: str, full_name: str) -> None:
@@ -36,3 +36,6 @@ class AuthService:
             raise HTTPException(status.HTTP_400_BAD_REQUEST, detail=msg)
         if res.user is None:
             raise HTTPException(status.HTTP_400_BAD_REQUEST, detail="Kayıt başarısız")
+        # Supabase returns empty identities when email confirmation is on and email already exists
+        if hasattr(res.user, "identities") and res.user.identities is not None and len(res.user.identities) == 0:
+            raise HTTPException(status.HTTP_409_CONFLICT, detail="Bu e-posta adresiyle zaten bir hesap mevcut.")

@@ -66,7 +66,7 @@ async def create_board(
         body.initial_sprint.model_dump() if body.initial_sprint is not None else None
     )
     ai_columns_data = [col.model_dump() for col in body.ai_columns] if body.ai_columns else None
-    return await ctrl.create_board(body.title, user.id, sprint_data, body.team_id, ai_columns_data)
+    return await ctrl.create_board(body.title, user.id, sprint_data, body.team_id, ai_columns_data, body.project_id)
 
 
 @router.put("/{board_id}")

@@ -2,11 +2,11 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import {
   DndContext, DragEndEvent, DragOverEvent, DragOverlay, DragStartEvent,
-  PointerSensor, TouchSensor, useSensor, useSensors,
+  KeyboardSensor, PointerSensor, TouchSensor, useSensor, useSensors,
   pointerWithin, rectIntersection,
   type CollisionDetection,
 } from "@dnd-kit/core";
-import { SortableContext, horizontalListSortingStrategy } from "@dnd-kit/sortable";
+import { SortableContext, horizontalListSortingStrategy, sortableKeyboardCoordinates } from "@dnd-kit/sortable";
 import { useBoardStore } from "../store/useBoardStore";
 import { useSprintStore } from "../store/useSprintStore";
 import { useAIStore } from "../store/useAIStore";
@@ -101,9 +101,9 @@ function SprintModal({ boardId, onClose }: { boardId: string; onClose: () => voi
                   {sprint.goal && <p className="text-xs text-slate-500 italic mt-0.5 truncate">"{sprint.goal}"</p>}
                   {(sprint.start_date || sprint.end_date) && (
                     <p className="text-xs text-slate-400 mt-0.5">
-                      {sprint.start_date && new Date(sprint.start_date).toLocaleDateString("tr-TR", { day: "numeric", month: "short" })}
+                      {sprint.start_date && new Date(sprint.start_date).toLocaleDateString("en-US", { day: "numeric", month: "short" })}
                       {sprint.start_date && sprint.end_date && " – "}
-                      {sprint.end_date && new Date(sprint.end_date).toLocaleDateString("tr-TR", { day: "numeric", month: "short", year: "numeric" })}
+                      {sprint.end_date && new Date(sprint.end_date).toLocaleDateString("en-US", { day: "numeric", month: "short", year: "numeric" })}
                     </p>
                   )}
                 </div>
@@ -180,7 +180,7 @@ function SprintModal({ boardId, onClose }: { boardId: string; onClose: () => voi
                 type="text"
                 value={goal}
                 onChange={(e) => setGoal(e.target.value)}
-                placeholder="Sprint hedefi (opsiyonel)"
+                placeholder="Sprint goal (optional)"
                 className="w-full border border-slate-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 bg-white"
               />
               {createError && (
@@ -214,10 +214,10 @@ function SprintModal({ boardId, onClose }: { boardId: string; onClose: () => voi
 // ── Filter Bar ────────────────────────────────────────────────────────────────
 
 const PRIORITY_OPTS: { value: Priority; label: string; cls: string }[] = [
-  { value: "urgent", label: "Acil",   cls: "bg-red-100 text-red-600 border-red-200"      },
-  { value: "high",   label: "High", cls: "bg-orange-100 text-orange-500 border-orange-200" },
-  { value: "medium", label: "Orta",   cls: "bg-blue-100 text-blue-600 border-blue-200"   },
-  { value: "low",    label: "Low",  cls: "bg-slate-100 text-slate-500 border-slate-200" },
+  { value: "urgent", label: "Urgent", cls: "bg-red-100 text-red-600 border-red-200"      },
+  { value: "high",   label: "High",   cls: "bg-orange-100 text-orange-500 border-orange-200" },
+  { value: "medium", label: "Medium", cls: "bg-blue-100 text-blue-600 border-blue-200"   },
+  { value: "low",    label: "Low",    cls: "bg-slate-100 text-slate-500 border-slate-200" },
 ];
 
 // ── Main Component ────────────────────────────────────────────────────────────
@@ -266,7 +266,8 @@ export default function BoardView() {
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
-    useSensor(TouchSensor, { activationConstraint: { delay: 250, tolerance: 15 } })
+    useSensor(TouchSensor, { activationConstraint: { delay: 250, tolerance: 15 } }),
+    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
   );
 
   const collisionDetection: CollisionDetection = useCallback((args) => {
@@ -455,9 +456,9 @@ export default function BoardView() {
                   <div className="flex items-center gap-3 mt-0.5 flex-wrap">
                     {startDate && endDate && (
                       <span className="text-xs text-slate-500">
-                        {startDate.toLocaleDateString("tr-TR", { day: "numeric", month: "short" })}
+                        {startDate.toLocaleDateString("en-US", { day: "numeric", month: "short" })}
                         {" – "}
-                        {endDate.toLocaleDateString("tr-TR", { day: "numeric", month: "short", year: "numeric" })}
+                        {endDate.toLocaleDateString("en-US", { day: "numeric", month: "short", year: "numeric" })}
                       </span>
                     )}
                     {isActive && daysLeft !== null && (
@@ -474,12 +475,12 @@ export default function BoardView() {
               <div className="flex items-center gap-2 flex-shrink-0">
                 {isFuture && (
                   <button onClick={() => startSprint(activeSprint.id)} className="px-4 py-2 bg-primary text-white rounded-xl text-xs font-bold font-headline-md hover:brightness-110 active:scale-95 transition-all flex items-center gap-1.5">
-                    <span className="material-symbols-outlined text-[14px]">play_arrow</span>Sprint Start
+                    <span className="material-symbols-outlined text-[14px]">play_arrow</span>Start Sprint
                   </button>
                 )}
                 {isActive && (
                   <button onClick={() => completeSprint(activeSprint.id)} className="px-4 py-2 bg-white border border-green-300 text-green-700 rounded-xl text-xs font-bold font-headline-md hover:bg-green-50 active:scale-95 transition-all flex items-center gap-1.5">
-                    <span className="material-symbols-outlined text-[14px]">check_circle</span>Sprinti Complete
+                    <span className="material-symbols-outlined text-[14px]">check_circle</span>Complete Sprint
                   </button>
                 )}
               </div>
@@ -543,7 +544,7 @@ export default function BoardView() {
                 value={searchText}
                 onChange={(e) => setSearchText(e.target.value)}
                 className="pl-8 pr-3 py-1.5 bg-white/50 border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-primary/20 w-40 transition-all outline-none"
-                placeholder="Ara..."
+                placeholder="Search..."
                 type="text"
               />
             </div>
@@ -661,8 +662,12 @@ export default function BoardView() {
           </div>
         )}
         {hasActiveFilter && (
-          <div className="mb-4 rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-800">
-            Card drag is disabled while filters are active. Clear filters to move cards.
+          <div className="mb-4 rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-800 flex items-center justify-between gap-3">
+            <span>Drag is disabled while filters are active.</span>
+            <button
+              onClick={() => { setFilterPriorities(new Set()); setFilterAssignee(null); setSearchText(""); setFilterLabelIds(new Set()); }}
+              className="font-bold underline hover:text-amber-900 flex-shrink-0"
+            >Clear filters</button>
           </div>
         )}
 
@@ -694,7 +699,7 @@ export default function BoardView() {
                         onKeyDown={(e) => e.key === "Escape" && setShowColInput(false)} placeholder="Column name..."
                         className="w-full rounded-xl px-3 py-2 text-sm bg-white/70 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary/20" />
                       <div className="flex gap-2 mt-3">
-                        <button type="submit" disabled={addingCol || !newColTitle.trim()} className="bg-primary text-white text-xs font-medium px-3 py-1.5 rounded-lg disabled:opacity-50">Ekle</button>
+                        <button type="submit" disabled={addingCol || !newColTitle.trim()} className="bg-primary text-white text-xs font-medium px-3 py-1.5 rounded-lg disabled:opacity-50">Add</button>
                         <button type="button" onClick={() => { setShowColInput(false); setNewColTitle(""); }} className="text-slate-500 text-xs px-2 py-1.5 rounded-lg">Cancel</button>
                       </div>
                     </form>
@@ -722,7 +727,7 @@ export default function BoardView() {
         onClick={openNewTask}
         className="md:hidden fixed bottom-6 right-5 w-14 h-14 rounded-full bg-primary text-white shadow-xl shadow-primary/40 flex items-center justify-center z-40 active:scale-95 transition-transform"
         style={{ bottom: "max(24px, calc(env(safe-area-inset-bottom) + 16px))" }}
-        aria-label="Yeni görev ekle"
+        aria-label="Add task"
       >
         <span className="material-symbols-outlined text-[26px]">add</span>
       </button>

@@ -37,9 +37,18 @@ export interface Board {
   id: string;
   owner_id: string;
   title: string;
+  project_id?: string | null;
   created_at: string;
   is_archived?: boolean;
   team_names?: string[];
+}
+
+export interface Project {
+  id: string;
+  title: string;
+  description: string;
+  owner_id: string;
+  created_at: string;
 }
 
 export interface BoardMember {

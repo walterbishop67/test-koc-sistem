@@ -236,7 +236,7 @@ export default function AuthPage() {
             className="absolute inset-0 bg-black/50 backdrop-blur-sm"
             onClick={closeWelcome}
           />
-          <div className="relative w-full max-w-2xl rounded-[28px] border border-white/40 bg-white/95 shadow-2xl backdrop-blur-xl overflow-hidden">
+          <div className="relative w-full max-w-2xl rounded-[28px] border border-white/40 bg-white/95 shadow-2xl backdrop-blur-xl overflow-y-auto max-h-[90vh]">
             {/* top accent bar */}
             <div className="h-1 w-full bg-gradient-to-r from-red-500 via-red-400 to-orange-400" />
 

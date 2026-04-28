@@ -50,7 +50,7 @@ function DueDateBadge({ dueDate }: { dueDate: string }) {
   if (diffDays < 0) { cls = "bg-red-50 text-red-600"; icon = "event_busy"; }
   else if (diffDays <= 3) { cls = "bg-amber-50 text-amber-600"; icon = "schedule"; }
 
-  const label = due.toLocaleDateString("tr-TR", { day: "numeric", month: "short" });
+  const label = due.toLocaleDateString("en-US", { day: "numeric", month: "short" });
 
   return (
     <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold ${cls}`}>

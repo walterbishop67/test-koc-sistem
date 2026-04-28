@@ -161,7 +161,7 @@ export default function UserPickerModal({ existingEmails, onSelect, onClose }: P
                       ) : (
                         <span className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-primary text-white text-xs font-bold shadow-sm">
                           <span className="material-symbols-outlined text-[15px]">add</span>
-                          Ekle
+                          Add
                         </span>
                       )}
                     </button>

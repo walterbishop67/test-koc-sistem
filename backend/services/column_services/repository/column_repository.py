@@ -40,11 +40,28 @@ class ColumnRepository:
     async def get_with_board_owner(self, column_id: str) -> dict[str, Any] | None:
         res = (
             await self._sb.table("columns")
-            .select("id, boards!inner(owner_id)")
+            .select("id, boards!inner(id, owner_id)")
             .eq("id", column_id)
             .execute()
         )
         return res.data[0] if res.data else None
+
+    async def has_column_access(self, column_id: str, user_id: str) -> bool:
+        col = await self.get_with_board_owner(column_id)
+        if not col:
+            return False
+        board = col["boards"]
+        if board["owner_id"] == user_id:
+            return True
+        member = (
+            await self._sb.table("board_members")
+            .select("id")
+            .eq("board_id", board["id"])
+            .eq("user_id", user_id)
+            .eq("status", "accepted")
+            .execute()
+        )
+        return bool(member.data)
 
     async def update(self, column_id: str, updates: dict[str, Any]) -> dict[str, Any]:
         res = await self._sb.table("columns").update(updates).eq("id", column_id).execute()

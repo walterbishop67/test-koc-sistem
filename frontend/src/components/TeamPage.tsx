@@ -218,7 +218,7 @@ export default function TeamPage() {
             onClick={(e) => e.stopPropagation()}
           >
             <div className="w-10 h-1 bg-slate-200 rounded-full mx-auto mb-5 sm:hidden" />
-            <h2 className="font-headline-md text-headline-md text-on-surface mb-6">Yeni Team</h2>
+            <h2 className="font-headline-md text-headline-md text-on-surface mb-6">New Team</h2>
             <form onSubmit={handleCreate} className="space-y-4">
               <div>
                 <label className="block font-label-caps text-label-caps text-slate-500 mb-2">

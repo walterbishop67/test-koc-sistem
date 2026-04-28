@@ -88,6 +88,7 @@ def create_app() -> FastAPI:
     from backend.services.ai_services.routes.ai_routes import router as ai_router
     from backend.services.label_services.routes.label_routes import router as label_router
     from backend.services.team_services.routes.team_routes import router as team_router
+    from backend.services.project_services.routes.project_routes import router as project_router
 
     app.include_router(auth_router,         prefix="/api/v1/auth",          tags=["auth"])
     app.include_router(users_router,        prefix="/api/v1/users",         tags=["users"])
@@ -100,6 +101,7 @@ def create_app() -> FastAPI:
     app.include_router(notification_router, prefix="/api/v1/notifications", tags=["notifications"])
     app.include_router(ai_router,           prefix="/api/v1",               tags=["ai"])
     app.include_router(label_router,        prefix="/api/v1",               tags=["labels"])
+    app.include_router(project_router,      prefix="/api/v1/projects",      tags=["projects"])
 
     # ── HTTP request loglama ─────────────────────────────────────────────────
     @app.middleware("http")

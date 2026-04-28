@@ -11,11 +11,11 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-// Redirect to /login on 401
+// Redirect to /login on 401 only when a session token exists (protected route expiry)
 api.interceptors.response.use(
   (r) => r,
   (err) => {
-    if (err.response?.status === 401) {
+    if (err.response?.status === 401 && localStorage.getItem("taskflow_token")) {
       localStorage.removeItem("taskflow_token");
       window.location.href = "/login";
     }

@@ -63,7 +63,7 @@ class BoardRepository:
         )
         return await self._attach_team_names(res.data)
 
-    async def create(self, title: str, owner_id: str, team_id: str | None = None) -> dict[str, Any]:
+    async def create(self, title: str, owner_id: str, team_id: str | None = None, project_id: str | None = None) -> dict[str, Any]:
         payload: dict[str, Any] = {
             "id": str(uuid.uuid4()),
             "title": title,
@@ -71,6 +71,8 @@ class BoardRepository:
         }
         if team_id:
             payload["team_id"] = team_id
+        if project_id:
+            payload["project_id"] = project_id
         res = await self._sb.table("boards").insert(payload).execute()
         board = res.data[0]
         board["team_names"] = []

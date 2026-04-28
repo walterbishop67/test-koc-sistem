@@ -19,6 +19,7 @@ class AIColumnData(BaseModel):
 class BoardCreate(BaseModel):
     title: str
     team_id: str | None = None
+    project_id: str | None = None
     initial_sprint: Any | None = None  # SprintCreate payload — type Any, circular import önlemi
     ai_columns: list[AIColumnData] | None = None
 
@@ -31,6 +32,7 @@ class BoardResponse(BaseModel):
     id: str
     title: str
     owner_id: str
+    project_id: str | None = None
     created_at: str | None = None
     is_archived: bool = False
     team_names: list[str] = []

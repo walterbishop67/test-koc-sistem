@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Outlet, useNavigate, useLocation } from "react-router-dom";
 import { useBoardStore } from "../store/useBoardStore";
+import { useProjectStore } from "../store/useProjectStore";
 import { emailInitial, getTokenEmail } from "../utils/auth";
 import NotificationBell from "./NotificationBell";
 import kocLogo from "../assets/koc-logo.png";
@@ -59,6 +60,7 @@ export default function AppLayout() {
   const navigate   = useNavigate();
   const location   = useLocation();
   const { boards, fetchBoards } = useBoardStore();
+  const { projects, fetchProjects } = useProjectStore();
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [desktopSidebarCollapsed, setDesktopSidebarCollapsed] = useState(false);
@@ -82,7 +84,7 @@ export default function AppLayout() {
 
   useEffect(() => {
     setBoardsLoading(true);
-    fetchBoards().finally(() => setBoardsLoading(false));
+    Promise.all([fetchBoards(), fetchProjects()]).finally(() => setBoardsLoading(false));
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleLogout = () => {
@@ -125,7 +127,7 @@ export default function AppLayout() {
             <button
               onClick={() => navigate(-1)}
               className="md:hidden p-2 -ml-2 text-slate-600 hover:text-primary transition-colors rounded-lg"
-              aria-label="Geri"
+              aria-label="Back"
             >
               <span className="material-symbols-outlined">arrow_back</span>
             </button>
@@ -274,6 +276,9 @@ export default function AppLayout() {
               )}
               {boards.map((board, idx) => {
                 const gradient = BOARD_GRADIENTS[idx % BOARD_GRADIENTS.length];
+                const projectName = board.project_id
+                  ? projects.find((p) => p.id === board.project_id)?.title
+                  : null;
                 return (
                 <button
                   key={board.id}
@@ -289,11 +294,9 @@ export default function AppLayout() {
                   </div>
                   <div className={`min-w-0 ${desktopSidebarCollapsed ? "hidden" : ""}`}>
                     <div className="truncate">{board.title}</div>
-                    {board.team_names && board.team_names.length > 0 && (
-                      <div className="text-[10px] text-slate-400 truncate font-normal">
-                        {board.team_names.join(" · ")}
-                      </div>
-                    )}
+                    <div className="text-[10px] text-slate-400 truncate font-normal">
+                      {projectName ?? (board.team_names?.length ? board.team_names.join(" · ") : null)}
+                    </div>
                   </div>
                 </button>
                 );

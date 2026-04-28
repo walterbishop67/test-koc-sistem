@@ -17,9 +17,8 @@ class ColumnService:
         if not board:
             raise ForbiddenError("Board not found or not accessible")
 
-    async def _assert_column_owner(self, column_id: str, user_id: str) -> None:
-        col = await self._col_repo.get_with_board_owner(column_id)
-        if not col or col["boards"]["owner_id"] != user_id:
+    async def _assert_column_access(self, column_id: str, user_id: str) -> None:
+        if not await self._col_repo.has_column_access(column_id, user_id):
             raise ForbiddenError("Column not found")
 
     async def list_columns(self, board_id: str, user_id: str) -> list[dict[str, Any]]:
@@ -33,7 +32,7 @@ class ColumnService:
     async def update_column(
         self, column_id: str, title: str | None, position: str | None, user_id: str
     ) -> dict[str, Any]:
-        await self._assert_column_owner(column_id, user_id)
+        await self._assert_column_access(column_id, user_id)
         updates: dict[str, Any] = {}
         if title is not None:
             updates["title"] = title
@@ -45,5 +44,5 @@ class ColumnService:
         return await self._col_repo.update(column_id, updates)
 
     async def delete_column(self, column_id: str, user_id: str) -> None:
-        await self._assert_column_owner(column_id, user_id)
+        await self._assert_column_access(column_id, user_id)
         await self._col_repo.delete(column_id)

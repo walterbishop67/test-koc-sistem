@@ -186,6 +186,19 @@ async def get_label_controller(request: Request):
     return LabelController(svc)
 
 
+# ── Project ───────────────────────────────────────────────────────────────────
+
+async def get_project_controller(request: Request):
+    from backend.services.project_services.controllers.project_controller import ProjectController
+    from backend.services.project_services.repository.project_repository import ProjectRepository
+    from backend.services.project_services.services.project_service import ProjectService
+
+    sb = get_supabase(request)
+    repo = ProjectRepository(sb)
+    svc = ProjectService(repo)
+    return ProjectController(svc)
+
+
 # ── AI ────────────────────────────────────────────────────────────────────────
 
 async def get_ai_controller(settings: Settings = Depends(get_settings)):

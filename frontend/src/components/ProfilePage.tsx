@@ -111,7 +111,6 @@ export default function ProfilePage() {
           </div>
         )}
 
-        {/* Kaydet */}
         <button
           onClick={handleSave}
           disabled={saving || !fullName.trim()}
@@ -122,7 +121,7 @@ export default function ProfilePage() {
           ) : (
             <span className="material-symbols-outlined text-sm">save</span>
           )}
-          {saving ? "Kaydediliyor…" : "Kaydet"}
+          {saving ? "Saving..." : "Save"}
         </button>
       </div>
     </div>

@@ -47,6 +47,7 @@ interface BoardState {
     initialSprint?: { name: string; start_date?: string; end_date?: string; goal?: string },
     teamId?: string,
     aiColumns?: GeneratedColumn[],
+    projectId?: string,
   ) => Promise<Board>;
   updateBoard: (id: string, title: string) => Promise<void>;
   deleteBoard: (id: string) => Promise<void>;
@@ -111,11 +112,12 @@ export const useBoardStore = create<BoardState>((set, get) => ({
     return data;
   },
 
-  createBoard: async (title, initialSprint, teamId, aiColumns) => {
+  createBoard: async (title, initialSprint, teamId, aiColumns, projectId) => {
     const body: Record<string, unknown> = { title };
     if (initialSprint) body.initial_sprint = initialSprint;
     if (teamId) body.team_id = teamId;
     if (aiColumns) body.ai_columns = aiColumns;
+    if (projectId) body.project_id = projectId;
     const { data } = await api.post<Board>("/boards", body);
     set((s) => ({ boards: [...s.boards, data] }));
     return data;

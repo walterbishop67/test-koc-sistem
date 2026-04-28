@@ -407,7 +407,7 @@ export default function AnalyticsPage() {
                         </div>
                         <p className="text-xs font-bold text-slate-800 truncate">{b.title}</p>
                         <p className="text-[10px] text-slate-400 mt-0.5">
-                          {new Date(b.created_at).toLocaleDateString("tr-TR")}
+                          {new Date(b.created_at).toLocaleDateString("en-US")}
                         </p>
                       </button>
                     );
