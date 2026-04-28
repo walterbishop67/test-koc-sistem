@@ -179,6 +179,7 @@ export function SortableColumn({ column, onOpenCard, cardDragDisabled = false }:
       <div
         {...attributes}
         {...listeners}
+        style={{ touchAction: 'none' }}
         className="flex items-center justify-between px-2 cursor-grab active:cursor-grabbing"
       >
         <ColumnHeader column={column} />

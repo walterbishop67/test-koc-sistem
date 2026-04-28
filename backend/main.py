@@ -105,7 +105,7 @@ def create_app() -> FastAPI:
     @app.middleware("http")
     async def log_requests(request: Request, call_next):
         start = time.perf_counter()
-        log = get_logger("backend.main")
+        log = get_logger("app.main")
         log.info("→ %s %s", request.method, request.url.path)
         response = await call_next(request)
         elapsed = (time.perf_counter() - start) * 1000
@@ -115,7 +115,7 @@ def create_app() -> FastAPI:
     # ── Hata yönetimi ────────────────────────────────────────────────────────
     @app.exception_handler(Exception)
     async def _unhandled(request: Request, exc: Exception):
-        get_logger("backend.main").exception("İşlenmeyen hata: %s %s", request.method, request.url.path)
+        get_logger("app.main").exception("İşlenmeyen hata: %s %s", request.method, request.url.path)
         return JSONResponse(status_code=500, content={"error": "internal_server_error", "detail": str(exc)})
 
     # ── Health check ─────────────────────────────────────────────────────────
@@ -140,4 +140,4 @@ app = create_app()
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run("backend.main:app", host="127.0.0.1", port=8000, reload=True)
+    uvicorn.run("app.main:app", host="127.0.0.1", port=8000, reload=True)

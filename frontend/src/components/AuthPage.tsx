@@ -3,8 +3,6 @@ import { api } from "../api/client";
 import { useNavigate } from "react-router-dom";
 import kocLogo from "../assets/koc-logo.png";
 
-const GITHUB_REPO_URL = "https://github.com/walterbishop67/test-koc-sistem.git";
-
 const SSO_PROVIDERS = [
   {
     id: "azure",
@@ -130,43 +128,98 @@ export default function AuthPage() {
     setShowSsoPanel(false);
   };
 
+  const loginWithTestAccount = async () => {
+    setError(null);
+    setLoading(true);
+    try {
+      const { data } = await api.post<{ access_token: string }>("/auth/login", {
+        email: "tester@taskflow.dev",
+        password: "TaskFlowTest123!",
+      });
+      localStorage.setItem("taskflow_token", data.access_token);
+      navigate("/");
+    } catch {
+      setSignupDone(false);
+      setMode("login");
+      setEmail("tester@taskflow.dev");
+      setPassword("TaskFlowTest123!");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   if (signupDone) {
     return (
       <div className="bg-mesh min-h-screen px-4 py-8 sm:px-6 sm:py-10 lg:px-10 font-body-md text-on-surface">
         <div className="mx-auto flex min-h-[calc(100vh-4rem)] w-full max-w-4xl items-center justify-center">
-          <div className="glass-card w-full max-w-[520px] rounded-[24px] p-8 text-center sm:p-10 surgical-accent">
-            <span className="material-symbols-outlined mb-4 block text-5xl text-secondary">mark_email_read</span>
-            <h2 className="mb-2 font-headline-md text-headline-md text-on-surface">Check your email</h2>
-            <p className="mt-2 text-[13px] sm:text-sm text-on-surface-variant">
-              We sent a verification link to your email address. Please confirm your account to continue.
-            </p>
-            <div className="mt-4 flex items-start gap-2.5 rounded-xl bg-amber-50 border border-amber-200 px-4 py-3 text-left">
-              <span className="material-symbols-outlined mt-0.5 text-[18px] text-amber-500 flex-shrink-0">warning</span>
-              <p className="text-[12px] sm:text-[13px] text-amber-800">
-                The email may have landed in your <span className="font-semibold">spam / junk</span> folder. If you do not see it there and want to continue testing right away, you can sign in with the shared test account below.
+          <div className="glass-card w-full max-w-[520px] rounded-[24px] p-8 sm:p-10 surgical-accent">
+            {/* Email verification */}
+            <div className="text-center">
+              <span className="material-symbols-outlined mb-4 block text-5xl text-secondary">mark_email_read</span>
+              <h2 className="mb-2 font-headline-md text-headline-md text-on-surface">Check your email</h2>
+              <p className="mt-2 text-[13px] sm:text-sm text-on-surface-variant">
+                We sent a verification link to your email address. Please confirm your account to continue.
               </p>
-            </div>
-            <div className="mt-4 rounded-xl border border-slate-200 bg-slate-50/80 px-4 py-4 text-left">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-500">
-                Shared Test Account
-              </p>
-              <div className="mt-3 space-y-2 text-[13px] sm:text-sm text-slate-700">
-                <p>
-                  <span className="font-semibold text-slate-900">Email:</span> tester@taskflow.dev
-                </p>
-                <p>
-                  <span className="font-semibold text-slate-900">Password:</span> TaskFlowTest123!
+              <div className="mt-4 flex items-start gap-2.5 rounded-xl bg-amber-50 border border-amber-200 px-4 py-3 text-left">
+                <span className="material-symbols-outlined mt-0.5 text-[18px] text-amber-500 flex-shrink-0">warning</span>
+                <p className="text-[12px] sm:text-[13px] text-amber-800">
+                  The email may have landed in your <span className="font-semibold">spam / junk</span> folder.
                 </p>
               </div>
             </div>
+
+            {/* Divider */}
+            <div className="my-6 flex items-center gap-3">
+              <div className="h-px flex-1 bg-slate-200" />
+              <span className="text-[11px] font-semibold uppercase tracking-widest text-slate-400">
+                or continue testing
+              </span>
+              <div className="h-px flex-1 bg-slate-200" />
+            </div>
+
+            {/* Shared test account */}
+            <div className="rounded-2xl border border-slate-200 bg-slate-50/70 p-4">
+              <div className="mb-3 flex items-center gap-2">
+                <span className="material-symbols-outlined text-[18px] text-secondary">science</span>
+                <p className="text-[12px] font-semibold uppercase tracking-widest text-slate-500">
+                  Shared Test Account
+                </p>
+              </div>
+              <div className="space-y-2 rounded-xl border border-slate-200 bg-white px-4 py-3 font-mono text-[13px]">
+                <div className="flex items-center justify-between gap-2">
+                  <span className="text-slate-400">Email</span>
+                  <span className="font-semibold text-on-surface select-all">tester@taskflow.dev</span>
+                </div>
+                <div className="h-px bg-slate-100" />
+                <div className="flex items-center justify-between gap-2">
+                  <span className="text-slate-400">Password</span>
+                  <span className="font-semibold text-on-surface select-all">TaskFlowTest123!</span>
+                </div>
+              </div>
+              <button
+                onClick={loginWithTestAccount}
+                disabled={loading}
+                className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl bg-primary py-3 text-sm font-semibold text-on-primary shadow-md shadow-primary/20 transition-all hover:bg-primary/90 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                {loading ? (
+                  <>
+                    <span className="material-symbols-outlined animate-spin text-[18px]">refresh</span>
+                    Signing in…
+                  </>
+                ) : (
+                  <>
+                    <span className="material-symbols-outlined text-[18px]">login</span>
+                    Sign in with test account
+                  </>
+                )}
+              </button>
+            </div>
+
             <button
-              onClick={() => {
-                setMode("login");
-                setSignupDone(false);
-              }}
-              className="mt-8 text-sm font-semibold text-primary transition-all hover:underline underline-offset-4"
+              onClick={() => { setMode("login"); setSignupDone(false); }}
+              className="mt-6 block w-full text-center text-sm font-semibold text-primary transition-all hover:underline underline-offset-4"
             >
-              Sign in
+              Back to sign in
             </button>
           </div>
         </div>
@@ -292,18 +345,20 @@ export default function AuthPage() {
               </div>
 
               {/* signature */}
-              <div className="mt-5 border-t border-slate-100 pt-4 text-center">
+              <div className="mt-5 border-t border-slate-100 pt-4 flex flex-col items-center gap-1.5 sm:flex-row sm:justify-between">
                 <p className="text-[11px] text-slate-400">
                   Designed & developed by{" "}
                   <span className="font-semibold text-slate-600">Umut Altun</span>
                 </p>
                 <a
-                  href={GITHUB_REPO_URL}
+                  href="https://github.com/walterbishop67/test-koc-sistem"
                   target="_blank"
-                  rel="noreferrer"
-                  className="mt-3 inline-flex items-center justify-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-[11px] font-semibold text-slate-600 transition-all hover:border-slate-300 hover:text-red-600 hover:shadow-sm"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 text-[11px] text-slate-400 transition-colors hover:text-slate-700"
                 >
-                  <span className="material-symbols-outlined text-[15px]">code</span>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z" />
+                  </svg>
                   View source on GitHub
                 </a>
               </div>
@@ -614,15 +669,6 @@ export default function AuthPage() {
                         {isLogin ? "Create an account" : "Sign In"}
                       </button>
                     </p>
-                    <a
-                      href={GITHUB_REPO_URL}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="flex w-full items-center justify-center gap-2 rounded-xl border border-slate-200 bg-slate-50/70 py-2.5 text-[13px] font-semibold text-slate-600 transition-all duration-300 hover:border-slate-300 hover:bg-white hover:text-red-600"
-                    >
-                      <span className="material-symbols-outlined text-[18px]">code</span>
-                      View source on GitHub
-                    </a>
                   </div>
                 </>
               )}
@@ -635,6 +681,17 @@ export default function AuthPage() {
           <div className="flex items-center gap-5">
             <a href="#" className="transition-all hover:text-red-600 hover:underline underline-offset-4">Privacy Policy</a>
             <a href="#" className="transition-all hover:text-red-600 hover:underline underline-offset-4">Terms of Service</a>
+            <a
+              href="https://github.com/walterbishop67/test-koc-sistem"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 transition-all hover:text-slate-800 hover:underline underline-offset-4"
+            >
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z" />
+              </svg>
+              GitHub
+            </a>
           </div>
         </footer>
       </div>

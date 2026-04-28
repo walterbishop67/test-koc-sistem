@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import string
 from typing import TYPE_CHECKING, Any
 
 from backend.infrastructure.shared.exceptions import ForbiddenError
@@ -58,14 +57,17 @@ class BoardService:
     ) -> dict[str, Any]:
         board = await self._repo.create(title, user_id, team_id)
         board_id = board["id"]
+        # BASE-62 digits matching the fractional-indexing library on the frontend.
+        # Valid single-digit keys: 'a' + BASE_62[i] → 'a0', 'a1', ..., 'az'
+        _BASE_62 = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
         if ai_columns:
             for i, column_data in enumerate(ai_columns):
-                col_position = string.ascii_lowercase[i]
+                col_position = f"a{_BASE_62[i % 62]}"
                 created_col = await self._col_repo.create(board_id, column_data.get("name", "Untitled"), col_position)
                 tasks = column_data.get("tasks") or []
                 if tasks and self._card_repo:
                     for j, task_data in enumerate(tasks):
-                        card_position = string.ascii_lowercase[j]
+                        card_position = f"a{_BASE_62[j % 62]}"
                         await self._card_repo.create(
                             column_id=created_col["id"],
                             title=task_data.get("title", "Untitled Task"),
@@ -74,8 +76,8 @@ class BoardService:
                             priority=task_data.get("priority"),
                         )
         else:
-            await self._col_repo.create(board_id, "In Progress", "a")
-            await self._col_repo.create(board_id, "Done", "b")
+            await self._col_repo.create(board_id, "In Progress", "a0")
+            await self._col_repo.create(board_id, "Done", "a1")
         if initial_sprint and self._sprint_repo:
             await self._sprint_repo.create(
                 board_id=board_id,

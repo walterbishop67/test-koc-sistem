@@ -266,7 +266,7 @@ export default function BoardView() {
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
-    useSensor(TouchSensor, { activationConstraint: { delay: 500, tolerance: 10 } })
+    useSensor(TouchSensor, { activationConstraint: { delay: 250, tolerance: 15 } })
   );
 
   const collisionDetection: CollisionDetection = useCallback((args) => {

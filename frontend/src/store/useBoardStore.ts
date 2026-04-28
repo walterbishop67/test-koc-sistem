@@ -3,6 +3,24 @@ import { generateKeyBetween } from "fractional-indexing";
 import { api } from "../api/client";
 import type { Board, Column, Card, BoardMember, Priority, Comment, GeneratedColumn, CardActivity, Label } from "../types";
 
+const _BASE_62 = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+
+function _isValidFractionalKey(pos: string): boolean {
+  if (!pos) return false;
+  const head = pos.charCodeAt(0);
+  const expectedLen =
+    head >= 97 && head <= 122 ? head - 97 + 2 :  // 'a'-'z'
+    head >= 65 && head <= 90  ? 90 - head + 2  :  // 'A'-'Z'
+    -1;
+  return expectedLen > 0 && pos.length >= expectedLen;
+}
+
+function _normalizePositions<T extends { position: string }>(items: T[]): T[] {
+  if (items.length === 0 || items.every((it) => _isValidFractionalKey(it.position))) return items;
+  const sorted = [...items].sort((a, b) => (a.position < b.position ? -1 : 1));
+  return sorted.map((item, i) => ({ ...item, position: `a${_BASE_62[i % 62]}` }));
+}
+
 /** Modal açılırken anında gösterilecek optimistik aktiviteler (Zustand dışı). */
 export const pendingActivityMap = new Map<string, CardActivity>();
 
@@ -137,7 +155,11 @@ export const useBoardStore = create<BoardState>((set, get) => ({
   fetchColumns: async (boardId) => {
     set({ columns: [] });
     const { data } = await api.get<Column[]>(`/boards/${boardId}/columns`);
-    set({ columns: data });
+    const withNormalizedCards = data.map((col) => ({
+      ...col,
+      cards: _normalizePositions(col.cards ?? []),
+    }));
+    set({ columns: _normalizePositions(withNormalizedCards) });
   },
 
   createColumn: async (boardId, title) => {

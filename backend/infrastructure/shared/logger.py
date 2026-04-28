@@ -29,14 +29,14 @@ _LEVEL_COLORS: dict[str, str] = {
 }
 
 _MODULE_COLORS: dict[str, str] = {
-    "backend.services.auth_services":   _GREEN,
-    "backend.services.board_services":  _CYAN,
-    "backend.services.column_services": _CYAN,
-    "backend.services.card_services":   _CYAN,
-    "backend.infrastructure.supabase":  _BLUE,
-    "backend.infrastructure.auth":      _YELLOW,
-    "backend.infrastructure.shared":    _WHITE,
-    "backend.main":                     _BOLD + _WHITE,
+    "app.services.auth_services":   _GREEN,
+    "app.services.board_services":  _CYAN,
+    "app.services.column_services": _CYAN,
+    "app.services.card_services":   _CYAN,
+    "app.infrastructure.supabase":  _BLUE,
+    "app.infrastructure.auth":      _YELLOW,
+    "app.infrastructure.shared":    _WHITE,
+    "app.main":                     _BOLD + _WHITE,
     "trace":                        _BOLD + _GREEN,
 }
 

@@ -85,7 +85,11 @@ export default function SortableCard({ card, onOpen, isDragOverlay = false, drag
   return (
     <div
       ref={setNodeRef}
-      style={{ transform: CSS.Transform.toString(transform), transition }}
+      style={{
+        transform: CSS.Transform.toString(transform),
+        transition,
+        touchAction: dragDisabled ? undefined : 'none',
+      }}
       className={`glass-card p-5 rounded-[24px] shadow-sm hover:shadow-md transition-all border-l-4 ${borderCls}
         ${dragDisabled ? "cursor-not-allowed opacity-90" : "cursor-grab active:scale-[0.98] active:ring-2 active:ring-[#F9423A]/20"}
         ${isDragging ? "opacity-40 ring-2 ring-[#F9423A]/30 ring-offset-1" : ""}`}
